@@ -1,0 +1,15 @@
+#+TITLE:(#| TMPL_VAR name |#)
+#+SUBTITLE: What (#| TMPL_VAR name |#) is.
+
+(#| TMPL_VAR name |#) does...
+
+* Getting started
+Clone the git repository:
+#+begin_src sh
+  git clone --recursive https://github.com/atlas-engineer/(#| TMPL_VAR name |#)
+#+end_src
+
+* API
+* How it works
+* To-Dos
+- [ ]
