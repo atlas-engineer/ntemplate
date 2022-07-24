@@ -1,15 +1,22 @@
 #+TITLE:(#| TMPL_VAR name |#)
-#+SUBTITLE: What (#| TMPL_VAR name |#) is.
+
+*What (#| TMPL_VAR name |#) is.*
 
 (#| TMPL_VAR name |#) does...
 
 * Getting started
-Clone the git repository:
+Clone the Git repository:
 #+begin_src sh
-  git clone --recursive https://github.com/atlas-engineer/(#| TMPL_VAR name |#)
+  git clone --recursive https://github.com/atlas-engineer/(#| TMPL_VAR name |#) ~/common-lisp/
 #+end_src
 
-* API
+* Examples
+
+#+begin_src lisp
+  ; Basic example here, see more in package.lisp.
+#+end_src
+
 * How it works
-* To-Dos
+
+* Roadmap
 - [ ]

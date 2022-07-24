@@ -1,6 +1,6 @@
 ;;;; SPDX-FileCopyrightText: (#| TMPL_VAR author |#)
 ;;;; SPDX-License-Identifier: (#| TMPL_VAR license |#)
 
-(defpackage #:(#| TMPL_VAR name |#)
-  (:use #:cl)
+(uiop:define-package #:(#| TMPL_VAR name |#)
+  (:use #:common-lisp)
   (:documentation "Describe `(#| TMPL_VAR name |#)' package here"))
