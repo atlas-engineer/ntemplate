@@ -4,6 +4,7 @@
 (defsystem "(#| TMPL_VAR name |#)"
   :description "Describe (#| TMPL_VAR name |#) here"
   :author "(#| TMPL_VAR author |#)"
+  :homepage "https://github.com/atlas-engineer/(#| TMPL_VAR name |#)"
   :license  "(#| TMPL_VAR license |#)"
   :version "0.0.0"
   :in-order-to ((test-op (test-op "(#| TMPL_VAR name |#)/tests")))(#| TMPL_IF depends-on |#)
