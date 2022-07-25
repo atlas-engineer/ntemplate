@@ -1,23 +1,25 @@
 ;;;; SPDX-FileCopyrightText: (#| TMPL_VAR author |#)
 ;;;; SPDX-License-Identifier: (#| TMPL_VAR license |#)
 
-(asdf:defsystem #:(#| TMPL_VAR name |#)
+(defsystem "(#| TMPL_VAR name |#)"
   :description "Describe (#| TMPL_VAR name |#) here"
   :author "(#| TMPL_VAR author |#)"
+  :homepage "https://github.com/atlas-engineer/(#| TMPL_VAR name |#)"
   :license  "(#| TMPL_VAR license |#)"
-  :version "0.0.1"
-  :serial t(#| TMPL_IF depends-on |#)
+  :version "0.0.0"
+  :in-order-to ((test-op (test-op "(#| TMPL_VAR name |#)/tests")))(#| TMPL_IF depends-on |#)
   :depends-on (#| TMPL_VAR dependencies-string |#)(#| /TMPL_IF |#)
+  :serial t
   :components ((:file "package")
                (:file "(#| TMPL_VAR name |#)")))
 
 (defsystem "(#| TMPL_VAR name |#)/tests"
   :depends-on ((#| TMPL_VAR name |#) lisp-unit2)
   :serial t
-  :components ((:file "tests/package")
-               (:file "tests/tests"))
+  :pathname "tests/"
+  :components ((:file "package")
+               (:file "tests"))
   :perform (test-op (o c)
                     (symbol-call :lisp-unit2 :run-tests
                                  :package :(#| TMPL_VAR name |#)/tests
-                                 :run-contexts (symbol-function
-                                                (read-from-string "lisp-unit2:with-summary-context")))))
+                                 :run-contexts (find-symbol "WITH-SUMMARY-CONTEXT" :lisp-unit2))))
