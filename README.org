@@ -1,3 +1,24 @@
+This repository is a template for the pattern of libraries that
+emerged in Atlas Engineer (see [[https://github.com/atlas-engineer/nkeymaps][nkeymaps]], [[https://github.com/atlas-engineer/ndebug][ndebug]], [[https://github.com/atlas-engineer/nfiles][nfiles]] for
+manifestations of this pattern). It saves some hour of repository set
+up and is as easy to use as
+
+#+begin_src lisp
+  ;; In your REPL.
+  (ql:quickload :quickproject)
+  ;; IMPORTANT: Delete the .git directory to not break Quickproject copying.
+  ;; FIXME: Make Quickproject ignore the .git directory.
+  (delete-directory #p"/path/to/ntemplate/.git/" :recursive t)
+  ;; Finally, create the project based on a template.
+  (quickproject:make-project
+   #p"/path/to/your/lib/"
+   :template-directory #p"/path/to/ntemplate/"
+   :author "Atlas Engineer LLC"
+   :license "BSD-3 Clause")
+#+end_src
+
+And then go on with doing the actual work, testing, and documentation ;)
+
 #+TITLE:(#| TMPL_VAR name |#)
 
 *What (#| TMPL_VAR name |#) is.*
