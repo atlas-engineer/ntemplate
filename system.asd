@@ -14,7 +14,7 @@
                (:file "(#| TMPL_VAR name |#)")))
 
 (defsystem "(#| TMPL_VAR name |#)/tests"
-  :depends-on ((#| TMPL_VAR name |#) lisp-unit2)
+  :depends-on (#:(#| TMPL_VAR name |#) #:lisp-unit2)
   :serial t
   :pathname "tests/"
   :components ((:file "package")
