@@ -20,6 +20,12 @@
   :components ((:file "package")
                (:file "tests"))
   :perform (test-op (o c)
-                    (symbol-call :lisp-unit2 :run-tests
-                                 :package :(#| TMPL_VAR name |#)/tests
-                                 :run-contexts (find-symbol "WITH-SUMMARY-CONTEXT" :lisp-unit2))))
+                    (let* ((*debugger-hook* nil)
+                           (test-results (symbol-call :lisp-unit2 :run-tests
+                                                      :package :(#| TMPL_VAR name |#)/tests
+                                                      :run-contexts (find-symbol "WITH-SUMMARY-CONTEXT" :lisp-unit2))))
+                      (when (or
+                             (uiop:symbol-call :lisp-unit2 :failed test-results)
+                             (uiop:symbol-call :lisp-unit2 :errors test-results))
+                        ;; Arbitrary but hopefully recognizable exit code.
+                        (quit 18)))))
