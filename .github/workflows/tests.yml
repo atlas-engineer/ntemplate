@@ -15,9 +15,9 @@ jobs:
     name: ${{ matrix.lisp }} on ${{ matrix.os }}
     strategy:
       matrix:
-        lisp: [sbcl-bin, ccl, ecl, clisp]
+        lisp: [sbcl-bin, ccl, ecl]
         rosargs: [dynamic-space-size=3072]
-        os: [ubuntu-latest] # macos-latest, windows-latest when we understand commands to install Roswell on those
+        os: [ubuntu-latest, macos-latest] # try windows-latest when we understand commands to install Roswell on it
 
     # run the job on every combination of "lisp" and "os" above
     runs-on: ${{ matrix.os }}
@@ -61,19 +61,19 @@ jobs:
     - name: Load the system
       shell: bash
       run: |
-        ros ${{ matrix.rosargs }}  -e '(handler-case (ql:quickload :(#| TMPL_VAR name |#)) (error (a) (format t "caught error ~s~%~a~%" a a) (uiop:quit 17)))'
+        ros ${{ matrix.rosargs }} -e '(push (uiop:getcwd) ql:*local-project-directories*)' -e '(handler-case (ql:quickload :(#| TMPL_VAR name |#)) (error (a) (format t "caught error ~s~%~a~%" a a) (uiop:quit 17)))'
 
     - name: Run tests
       shell: bash
       run: |
-        ros ${{ matrix.rosargs }} -e '(handler-case (ql:quickload :(#| TMPL_VAR name |#)) (error (a) (format t "caught error ~s~%~a~%" a a) (uiop:quit 17)))' -e '(ql:quickload :lisp-unit2)' -e '(asdf:test-system :(#| TMPL_VAR name |#))'
+        ros ${{ matrix.rosargs }} -e '(setf *debugger-hook* nil)' -e '(push (uiop:getcwd) ql:*local-project-directories*)' -e '(handler-case (ql:quickload :(#| TMPL_VAR name |#)) (error (a) (format t "caught error ~s~%~a~%" a a) (uiop:quit 17)))' -e '(ql:quickload :lisp-unit2)' -e '(asdf:test-system :(#| TMPL_VAR name |#))'
 
     - name: Compilation warnings
       shell: bash
       run: |
-        ros ${{ matrix.rosargs }} -e '(load ".github/report-warnings.lisp")' -e '(compilation-conditions :(#| TMPL_VAR name |#))'
+        ros ${{ matrix.rosargs }} -e '(push (uiop:getcwd) ql:*local-project-directories*)' -e '(load ".github/report-warnings.lisp")' -e '(compilation-conditions :(#| TMPL_VAR name |#))'
 
     - name: Unbound exports
       shell: bash
       run: |
-        ros ${{ matrix.rosargs }} -e '(ql:quickload :(#| TMPL_VAR name |#))' -e '(load ".github/report-unbound-exports.lisp")' -e '(unbound-exports :(#| TMPL_VAR name |#))'
+        ros ${{ matrix.rosargs }} -e '(push (uiop:getcwd) ql:*local-project-directories*)' -e '(ql:quickload :(#| TMPL_VAR name |#))' -e '(load ".github/report-unbound-exports.lisp")' -e '(unbound-exports :(#| TMPL_VAR name |#))'
