@@ -11,7 +11,8 @@
   :depends-on (#| TMPL_VAR dependencies-string |#)(#| /TMPL_IF |#)
   :serial t
   :components ((:file "package")
-               (:file "(#| TMPL_VAR name |#)")))
+               (:file "(#| TMPL_VAR name |#)"))
+  :in-order-to ((test-op (test-op "(#| TMPL_VAR name |#)/tests"))))
 
 (defsystem "(#| TMPL_VAR name |#)/tests"
   :depends-on (#:(#| TMPL_VAR name |#) #:lisp-unit2)
