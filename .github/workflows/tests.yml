@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: (#| TMPL_VAR author |#)
+# SPDX-License-Identifier: (#| TMPL_VAR license |#)
 # Inspired by http://3bb.cc/blog/2020/09/11/github-ci/.
 name: Tests
 
