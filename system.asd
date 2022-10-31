@@ -14,7 +14,7 @@
   :in-order-to ((test-op (test-op "(#| TMPL_VAR name |#)/tests"))))
 
 (defsystem "(#| TMPL_VAR name |#)/tests"
-  :depends-on (#:(#| TMPL_VAR name |#) #:lisp-unit2)
+  :depends-on ("(#| TMPL_VAR name |#)" "lisp-unit2")
   :serial t
   :pathname "tests/"
   :components ((:file "package")
