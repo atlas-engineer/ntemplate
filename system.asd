@@ -11,21 +11,25 @@
   :serial t
   :components ((:file "package")
                (:file "(#| TMPL_VAR name |#)"))
-  :in-order-to ((test-op (test-op "(#| TMPL_VAR name |#)/tests"))))
+  :in-order-to ((test-op (test-op "(#| TMPL_VAR name |#)/tests")
+                         (test-op "(#| TMPL_VAR name |#)/tests/compilation"))))
+
+(defsystem "(#| TMPL_VAR name |#)/submodules"
+  :defsystem-depends-on ("nasdf")
+  :class :nasdf-submodule-system)
 
 (defsystem "(#| TMPL_VAR name |#)/tests"
-  :depends-on ("(#| TMPL_VAR name |#)" "lisp-unit2")
+  :defsystem-depends-on ("nasdf")
+  :class :nasdf-test-system
+  :depends-on ("(#| TMPL_VAR name |#)")
+  :targets (:package :(#| TMPL_VAR name |#)/tests)
   :serial t
   :pathname "tests/"
   :components ((:file "package")
-               (:file "tests"))
-  :perform (test-op (o c)
-                    (let* ((*debugger-hook* nil)
-                           (test-results (symbol-call :lisp-unit2 :run-tests
-                                                      :package :(#| TMPL_VAR name |#)/tests
-                                                      :run-contexts (find-symbol "WITH-SUMMARY-CONTEXT" :lisp-unit2))))
-                      (when (or
-                             (uiop:symbol-call :lisp-unit2 :failed test-results)
-                             (uiop:symbol-call :lisp-unit2 :errors test-results))
-                        ;; Arbitrary but hopefully recognizable exit code.
-                        (quit 18)))))
+               (:file "tests")))
+
+(defsystem "(#| TMPL_VAR name |#)/tests/compilation"
+  :defsystem-depends-on ("nasdf")
+  :class :nasdf-compilation-test-system
+  :depends-on ((#| TMPL_VAR name |#))
+  :packages (:(#| TMPL_VAR name |#)))
