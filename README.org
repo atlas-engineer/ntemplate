@@ -17,6 +17,46 @@ up and is as easy to use as
    :license "BSD-3 Clause")
 #+end_src
 
+To add submodules to the repository, you can leverage the Guix definition.  This
+only works for packages using a git-reference as source:
+
+#+begin_src lisp
+  (mapcar #'asdf:load-system '(:alexandria :serapeum :ospm :log4cl))
+  (defvar *git-program* "git")
+
+  (flet ((fetch-git-modules (local-repository &rest packages)
+           "LOCAL-REPOSITORY is the path to the Git repository where to add the submodules.
+  PACKAGES are the Guix packages corresponding to the submodules to fetch.
+
+  Return 2 values:
+  - the list of inputs with a Git reference;
+  - the list of inputs without a Git reference; you will have to add these submodules manually."
+           (labels ((repo-url-name (url)
+                      (let ((pos (search "/" url :from-end t :end2 (1- (length url)))))
+                        (serapeum:string-replace-all "/" (subseq url pos) "")))
+                    (sbcl-recursive-inputs (pkg)
+                      (let ((pkgs (mapcar (alexandria:compose #'first #'ospm:find-os-packages)
+                                          (remove-if-not (lambda (input) (serapeum:string-prefix-p "sbcl-" input))
+                                                         (ospm:inputs pkg)))))
+                        (append pkgs
+                                (alexandria:mappend #'sbcl-recursive-inputs pkgs)))) )
+             (multiple-value-bind (git-inputs non-git-inputs)
+                 (serapeum:partition (alexandria:compose #'ospm::guix-package-source-git-reference-p #'ospm:source)
+                                     (alexandria:mappend (alexandria:compose  #'sbcl-recursive-inputs #'first #'ospm:find-os-packages) packages))
+               (mapc (lambda (url)
+                       (let ((target (uiop:strcat "_build/" (repo-url-name url))))
+                         (uiop:with-current-directory (local-repository)
+                           (if (uiop:directory-exists-p target)
+                               (log:info "~s already exists" target)
+                               (let ((cmd `(,*git-program* "submodule" "add" ,url ,target)))
+                                 (format t "~&~{~a~,^ ~}~&" cmd)
+                                 (apply #'uiop:run-program cmd))))))
+                     (mapcar (alexandria:compose #'ospm:url #'ospm:source) (delete-duplicates git-inputs)))
+               (values git-inputs non-git-inputs)))))
+    (fetch-git-modules "/path/to/repository/checkout" "lisp-lib1" "lisp-lib2"))
+#+end_src
+
+
 And then go on with doing the actual work, testing, and documentation ;)
 
 #+TITLE:(#| TMPL_VAR name |#)
