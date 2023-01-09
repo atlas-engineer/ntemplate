@@ -31,5 +31,5 @@
 (defsystem "(#| TMPL_VAR name |#)/tests/compilation"
   :defsystem-depends-on ("nasdf")
   :class :nasdf-compilation-test-system
-  :depends-on ((#| TMPL_VAR name |#))
+  :depends-on ("(#| TMPL_VAR name |#)")
   :packages (:(#| TMPL_VAR name |#)))
