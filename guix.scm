@@ -10,7 +10,7 @@
 ;;
 ;; To use as the basis for a development environment, run:
 ;;
-;;   guix shell --container -D -f build-scripts/guix.scm
+;;   guix shell --container -D -f guix.scm
 ;;
 ;; Replace --container by --pure if you still want ASDF to see external
 ;; libraries in ~/common-lisp, etc.
