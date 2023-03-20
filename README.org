@@ -38,11 +38,13 @@ only works for packages using a git-reference as source:
                       (let ((pkgs (mapcar (alexandria:compose #'first #'ospm:find-os-packages)
                                           (remove-if-not (lambda (input) (serapeum:string-prefix-p "sbcl-" input))
                                                          (ospm:inputs pkg)))))
-                        (append pkgs
-                                (alexandria:mappend #'sbcl-recursive-inputs pkgs)))) )
+                        (cons pkg
+                              (alexandria:mappend #'sbcl-recursive-inputs pkgs)))))
              (multiple-value-bind (git-inputs non-git-inputs)
                  (serapeum:partition (alexandria:compose #'ospm::guix-package-source-git-reference-p #'ospm:source)
-                                     (alexandria:mappend (alexandria:compose  #'sbcl-recursive-inputs #'first #'ospm:find-os-packages) packages))
+                                     (delete-duplicates (alexandria:mappend
+                                                         (alexandria:compose  #'sbcl-recursive-inputs #'first #'ospm:find-os-packages)
+                                                         packages)))
                (mapc (lambda (url)
                        (let ((target (uiop:strcat "_build/" (repo-url-name url))))
                          (uiop:with-current-directory (local-repository)
@@ -50,10 +52,12 @@ only works for packages using a git-reference as source:
                                (log:info "~s already exists" target)
                                (let ((cmd `(,*git-program* "submodule" "add" ,url ,target)))
                                  (format t "~&~{~a~,^ ~}~&" cmd)
-                                 (apply #'uiop:run-program cmd))))))
+                                 (uiop:run-program cmd
+                                                   :output t
+                                                   :error-output t))))))
                      (mapcar (alexandria:compose #'ospm:url #'ospm:source) (delete-duplicates git-inputs)))
                (values git-inputs non-git-inputs)))))
-    (fetch-git-modules "/path/to/repository/checkout" "lisp-lib1" "lisp-lib2"))
+    (fetch-git-modules "/path/to/repository/checkout" "sbcl-lisp-unit2" "sbcl-MY-OTHER-LIB" "..."))
 #+end_src
 
 
