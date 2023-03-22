@@ -4,5 +4,3 @@
 (uiop:define-package :(#| TMPL_VAR name |#)
   (:use :common-lisp)
   (:documentation "Describe `(#| TMPL_VAR name |#)' package here"))
-
-(push :(#| TMPL_VAR name |#) *features*)
