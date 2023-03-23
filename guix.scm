@@ -14,7 +14,7 @@
 ;;
 ;; Replace --container by --pure if you still want ASDF to see external
 ;; libraries in ~/common-lisp, etc.
-;; To build a local executable and then run it:
+;;
 ;;; Code:
 
 (use-modules (guix packages)
