@@ -43,7 +43,9 @@ only works for packages using a git-reference as source:
              (multiple-value-bind (git-inputs non-git-inputs)
                  (serapeum:partition (alexandria:compose #'ospm::guix-package-source-git-reference-p #'ospm:source)
                                      (delete-duplicates (alexandria:mappend
-                                                         (alexandria:compose  #'sbcl-recursive-inputs #'first #'ospm:find-os-packages)
+                                                         (lambda (pkg-name)
+                                                           (sbcl-recursive-inputs (first (or (ospm:find-os-packages pkg-name)
+                                                                                             (error "Package ~a not found" pkg-name)))))
                                                          packages)))
                (mapc (lambda (url)
                        (let ((target (uiop:strcat "_build/" (repo-url-name url))))
