@@ -58,7 +58,7 @@
    (synopsis "ADD A SYNOPSYS.")
    (home-page "https://github.com/atlas-engineer/(#| TMPL_VAR name |#)")
    (description "ADD A DESCRIPTION")
-   (license license:specify-license)))
+   (license license:bsd-3)))
 
 (define-public cl-(#| TMPL_VAR name |#)
   (sbcl-package->cl-source-package sbcl-(#| TMPL_VAR name |#)))
