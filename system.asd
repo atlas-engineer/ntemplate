@@ -9,6 +9,7 @@
   :version "0.0.0"(#| TMPL_IF depends-on |#)
   :depends-on (#| TMPL_VAR dependencies-string |#)(#| /TMPL_IF |#)
   :serial t
+  :pathname "source/"
   :components ((:file "package")
                (:file "(#| TMPL_VAR name |#)"))
   :in-order-to ((test-op (test-op "(#| TMPL_VAR name |#)/tests")
