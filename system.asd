@@ -5,6 +5,8 @@
   :description "Describe (#| TMPL_VAR name |#) here"
   :author "(#| TMPL_VAR author |#)"
   :homepage "https://github.com/atlas-engineer/(#| TMPL_VAR name |#)"
+  :bug-tracker "https://github.com/atlas-engineer/(#| TMPL_VAR name |#)/issues"
+  :source-control (:git "https://github.com/atlas-engineer/(#| TMPL_VAR name |#).git")
   :license  "(#| TMPL_VAR license |#)"
   :version "0.0.0"(#| TMPL_IF depends-on |#)
   :depends-on (#| TMPL_VAR dependencies-string |#)(#| /TMPL_IF |#)
