@@ -30,11 +30,21 @@
   (:documentation "Component type for XDG .desktop files to install."))
 (import 'nasdf-desktop-file :asdf-user)
 
+(export-always 'nasdf-appdata-file)
+(defclass nasdf-appdata-file (nasdf-file) ()
+  (:documentation "Component type for Appdata files to install."))
+(import 'nasdf-appdata-file :asdf-user)
+
+(export-always 'nasdf-icon-scalable-file)
+(defclass nasdf-icon-scalable-file (nasdf-file) ()
+  (:documentation "Component type for the SVG icon."))
+(import 'nasdf-icon-scalable-file :asdf-user)
+
 (export-always 'nasdf-icon-directory)
 (defclass nasdf-icon-directory (nasdf-file)
   ((asdf/interface::type :initform "png")) ; TODO: Is there a standard way to access the type?
   (:documentation "Component type for directory containing icon files to install.
-File ot type `type' are looked for.
+File of type `type' are looked for.
 The last number found in the file name is used to install the icon in the right directory."))
 (import 'nasdf-icon-directory :asdf-user)
 
@@ -187,6 +197,21 @@ Final path is resolved in `dest-source-dir'.")
                                   *datadir*))
           t))
 
+(defmethod asdf:output-files ((op asdf:compile-op) (c nasdf-appdata-file))
+  (values (list (merge-pathnames* (merge-pathnames*
+                                   (basename (asdf:component-name c))
+                                   "metainfo/")
+                                  *datadir*))
+          t))
+
+(defmethod asdf:output-files ((op asdf:compile-op) (c nasdf-icon-scalable-file))
+  (values (list (merge-pathnames* (merge-pathnames*
+                                   (basename (asdf:component-name c))
+                                   "icons/hicolor/scalable/apps/")
+                                  *datadir*))
+          t))
+
+;; TODO Moving png icons to assets/icons would simplify their handling.
 (defun scan-last-number (path)
   "Return the last number found in PATH.
 Return NIL is there is none."
