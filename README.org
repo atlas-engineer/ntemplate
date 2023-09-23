@@ -87,7 +87,7 @@ And then load ~:(#| TMPL_VAR name |#)~ in the REPL:
 * Examples
 
 #+begin_src lisp
-  ; Basic example here, see more in package.lisp.
+  ;; Basic example here, see more in package.lisp.
 #+end_src
 
 * How it works
