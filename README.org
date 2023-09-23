@@ -71,7 +71,7 @@ And then go on with doing the actual work, testing, and documentation ;)
 
 (#| TMPL_VAR name |#) does...
 
-* Getting started
+* Getting Started
 Clone the Git repository:
 #+begin_src sh
   git clone --recursive https://github.com/atlas-engineer/(#| TMPL_VAR name |#) ~/common-lisp/
